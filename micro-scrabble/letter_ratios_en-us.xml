@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<letters>
+  <letter char="E" number="12" points="1"/>
+  <letter char="A" number="9" points="1"/>
+  <letter char="I" number="9" points="1"/>
+  <letter char="O" number="8" points="1"/>
+  <letter char="N" number="6" points="1"/>
+  <letter char="R" number="6" points="1"/>
+  <letter char="T" number="6" points="1"/>
+  <letter char="L" number="4" points="1"/>
+  <letter char="S" number="4" points="1"/>
+  <letter char="U" number="4" points="1"/>
+  <letter char="D" number="4" points="2"/>
+  <letter char="G" number="3" points="2"/>
+  <letter char="B" number="2" points="3"/>
+  <letter char="C" number="2" points="3"/>
+  <letter char="M" number="2" points="3"/>
+  <letter char="P" number="2" points="3"/>
+  <letter char="F" number="2" points="4"/>
+  <letter char="H" number="2" points="4"/>
+  <letter char="V" number="2" points="4"/>
+  <letter char="W" number="2" points="4"/>
+  <letter char="Y" number="2" points="4"/>
+  <letter char="K" number="1" points="5"/>
+  <letter char="J" number="1" points="8"/>
+  <letter char="X" number="1" points="8"/>
+  <letter char="Q" number="1" points="10"/>
+  <letter char="Z" number="1" points="10"/>
+</letters>
