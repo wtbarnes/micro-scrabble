@@ -9,7 +9,7 @@ from random import randrange
 class Game(object):
     """Parent game class, set the rules"""
 
-    def __init__(self, max_rack_letters=7, letter_ratio_file=os.path.join(os.path.dirname(os.path.realpath(__file__)),'letter_ratios_en-us.xml'), board_setup_file=os.path.join(os.path.dirname(os.path.realpath(__file__)),'board_config.xml')):
+    def __init__(self, max_rack_letters=7, letter_ratio_file=os.path.join(os.path.dirname(os.path.realpath(__file__)),'config','letter_ratios_en-us.xml'), board_setup_file=os.path.join(os.path.dirname(os.path.realpath(__file__)),'config','board_config.xml')):
         """Set up the board and tile bag, add the players"""
         self.logger = logging.getLogger(type(self).__name__)
         self.max_rack_letters = max_rack_letters
@@ -35,26 +35,28 @@ class Game(object):
 class Board(object):
     """Scrabble board class"""
 
-    def __init__(self, board_setup_file):
+    def __init__(self, board_setup_file, default_color='#BBB89E'):
         """Setup scrabble board"""
         self.logger = logging.getLogger(type(self).__name__)
         self.board_matrix = []
         tree = ET.parse(board_setup_file)
         root = tree.getroot()
+        special_spaces = root.find('special')
         dims = root.find('dimensions')
         nrows,ncols = int(dims.attrib['rows']),int(dims.attrib['cols'])
+        self.dims = (nrows,ncols)
         for j in range(ncols):
-            tmp = []
             for i in range(nrows):
-                tmp.append({'label':None,'wmult':1,'lmult':1})
-            self.board_matrix.append(tmp)
-        special_spaces = root.find('special')
+                self.board_matrix.append({'label':None, 'wmult':1, 'lmult':1, 'letter':None, 'x':j, 'y':i, 'color':default_color})
+
         for space in special_spaces:
             i_row,i_col = int(space.attrib['row']),int(space.attrib['col'])
-            self.board_matrix[i_row][i_col]['label'] = space.attrib['label']
-            self.board_matrix[i_row][i_col]['wmult'] = space.attrib['wmult']
-            self.board_matrix[i_row][i_col]['lmult'] = space.attrib['lmult']
-
+            for square in self.board_matrix:
+                if square['x'] == i_col and square['y'] == i_row:
+                    square['label'] = space.attrib['label']
+                    square['wmult'] = space.attrib['wmult']
+                    square['lmult'] = space.attrib['lmult']
+                    square['color'] = space.attrib['color']
 
 
 class TileBag(object):
