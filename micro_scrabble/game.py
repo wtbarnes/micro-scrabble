@@ -9,8 +9,9 @@ from random import randrange
 class Game(object):
     """Parent game class, set the rules"""
 
-    def __init__(self, max_rack_letters=7, letter_ratio_file=os.path.join(os.path.dirname(os.path.realpath(__file__)),'config','letter_ratios_en-us.xml'), board_setup_file=os.path.join(os.path.dirname(os.path.realpath(__file__)),'config','board_config.xml')):
+    def __init__(self, name='Untitled', max_rack_letters=7, letter_ratio_file=os.path.join(os.path.dirname(os.path.realpath(__file__)),'config','letter_ratios_en-us.xml'), board_setup_file=os.path.join(os.path.dirname(os.path.realpath(__file__)),'config','board_config.xml')):
         """Set up the board and tile bag, add the players"""
+        self.name = name
         self.logger = logging.getLogger(type(self).__name__)
         self.max_rack_letters = max_rack_letters
         self.players = {}

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Scrabble | Board{% endblock %}
+{% block title %}Scrabble | {{ name }}{% endblock %}
 
 {% block head %}
   {{ super() }}
@@ -16,7 +16,6 @@
     <div class="col-md-1">
     </div>
     <div class="col-md-10" id='grid'>
-      <!-- <section id='grid'></section> -->
     </div>
     <div class="col-md-1">
     </div>
