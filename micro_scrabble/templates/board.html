@@ -15,9 +15,24 @@
   <div class="row">
     <div class="col-md-1">
     </div>
-    <div class="col-md-10" id='grid'>
+    <div class="col-md-8" id='grid'>
+      <h1>{{ name }}</h1>
     </div>
-    <div class="col-md-1">
+    <div class="col-md-3">
+      <table class="table">
+        <thead>
+          <th>Player</th>
+          <th>Score</th>
+        </thead>
+        <tbody>
+      {% for p in player_list %}
+      <tr>
+        <td>{{ p.name }}</td>
+        <td>{{ p.score }}</td>
+      </tr>
+      {% endfor %}
+        </tbody>
+    </table>
     </div>
   </div>
 </div>
@@ -61,7 +76,7 @@
               .attr("font-family","helvetica")
               .attr("font-size",function(d){if(d.letter){return "25px";}else{return "15px";}})
               .attr("font-weight",function(d){if(d.letter){return "bold";}else{return "normal";}})
-              .attr("dy", "1.25em")
+              .attr("dy", "2em")
               .attr("text-anchor","middle");
 
     //d3plus.textwrap().container(board_labels).resize(true).draw()

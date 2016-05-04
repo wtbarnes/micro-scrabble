@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}Scrabble | Player {{ name }}{% endblock %}
+{% block head %}
+  {{ super() }}
+  {% block scripts %}
+    {{ super() }}
+    <script type="text/javascript" src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  {% endblock %}
+{% endblock %}
+{%block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-10">
+    <h1>{{ name }}</h1>
+    <section id="rack"/>
+    {{ wtf.quick_form(form) }}
+    </div>
+    <div class="col-md-1">
+    </div>
+  </div>
+</div>
+<script type="text/javascript" charset="utf-8">
+  // create the svg
+  var svg = d3.select('#rack').append('svg')
+    .attr({
+      width: {{ num_letters }}*{{ square }},
+      height: {{ square }}
+    });
+
+  // calculate number of rows and columns
+  var squaresRow = Math.round({{ num_letters }});
+  var squaresColumn = Math.round(1);
+
+  var rectangles = svg.selectAll('g')
+                              .data({{ letter_rack|tojson }})
+                              .enter()
+                              .append('g');
+
+  var rectangle_attrs = rectangles.append('rect')
+                        .attr("width",{{ square }})
+                        .attr("height",{{ square }})
+                        .attr("x",function(d,i){return i*{{ square }};})
+                        .attr("y",0)
+                        .attr("fill","#BBB89E")
+                        .attr("stroke",'#fff');
+
+  var board_labels = rectangles.append('text')
+            .text(function(d){return d.letter;})
+            .attr("x",function(d,i){return i*{{ square }}+{{ square }}/2;})
+            .attr("y",0)
+            .attr("font-family","helvetica")
+            .attr("font-size","50px")
+            .attr("font-weight","bold")
+            .attr("dy", "1.25em")
+            .attr("text-anchor","middle");
+</script>
+{% endblock %}
