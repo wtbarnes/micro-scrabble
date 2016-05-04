@@ -3,69 +3,69 @@
   <dimensions rows="15" cols="15"/>
   <special>
     <!-- Triple word score -->
-    <space row="0" col="0" label="Triple word score" wmult="3" lmult="1" color="#E55154"/>
-    <space row="7" col="0" label="Triple word score" wmult="3" lmult="1" color="#E55154"/>
-    <space row="14" col="0" label="Triple word score" wmult="3" lmult="1" color="#E55154"/>
-    <space row="0" col="7" label="Triple word score" wmult="3" lmult="1" color="#E55154"/>
-    <space row="0" col="14" label="Triple word score" wmult="3" lmult="1" color="#E55154"/>
-    <space row="7" col="14" label="Triple word score" wmult="3" lmult="1" color="#E55154"/>
-    <space row="14" col="7" label="Triple word score" wmult="3" lmult="1" color="#E55154"/>
-    <space row="14" col="14" label="Triple word score" wmult="3" lmult="1" color="#E55154"/>
+    <space row="0" col="0" label="TW" wmult="3" lmult="1" color="#E55154"/>
+    <space row="7" col="0" label="TW" wmult="3" lmult="1" color="#E55154"/>
+    <space row="14" col="0" label="TW" wmult="3" lmult="1" color="#E55154"/>
+    <space row="0" col="7" label="TW" wmult="3" lmult="1" color="#E55154"/>
+    <space row="0" col="14" label="TW" wmult="3" lmult="1" color="#E55154"/>
+    <space row="7" col="14" label="TW" wmult="3" lmult="1" color="#E55154"/>
+    <space row="14" col="7" label="TW" wmult="3" lmult="1" color="#E55154"/>
+    <space row="14" col="14" label="TW" wmult="3" lmult="1" color="#E55154"/>
     <!-- Double word score -->
     <space row="7" col="7" label="Free" wmult="2" lmult="1" color="#F2ACAD"/>
-    <space row="1" col="1" label="Double word score" wmult="2" lmult="1" color="#F2ACAD"/>
-    <space row="2" col="2" label="Double word score" wmult="2" lmult="1" color="#F2ACAD"/>
-    <space row="3" col="3" label="Double word score" wmult="2" lmult="1" color="#F2ACAD"/>
-    <space row="4" col="4" label="Double word score" wmult="2" lmult="1" color="#F2ACAD"/>
-    <space row="10" col="10" label="Double word score" wmult="2" lmult="1" color="#F2ACAD"/>
-    <space row="11" col="11" label="Double word score" wmult="2" lmult="1" color="#F2ACAD"/>
-    <space row="12" col="12" label="Double word score" wmult="2" lmult="1" color="#F2ACAD"/>
-    <space row="13" col="13" label="Double word score" wmult="2" lmult="1" color="#F2ACAD"/>
-    <space row="1" col="13" label="Double word score" wmult="2" lmult="1" color="#F2ACAD"/>
-    <space row="2" col="12" label="Double word score" wmult="2" lmult="1" color="#F2ACAD"/>
-    <space row="3" col="11" label="Double word score" wmult="2" lmult="1" color="#F2ACAD"/>
-    <space row="4" col="10" label="Double word score" wmult="2" lmult="1" color="#F2ACAD"/>
-    <space row="10" col="4" label="Double word score" wmult="2" lmult="1" color="#F2ACAD"/>
-    <space row="11" col="3" label="Double word score" wmult="2" lmult="1" color="#F2ACAD"/>
-    <space row="12" col="2" label="Double word score" wmult="2" lmult="1" color="#F2ACAD"/>
-    <space row="13" col="1" label="Double word score" wmult="2" lmult="1" color="#F2ACAD"/>
+    <space row="1" col="1" label="DW" wmult="2" lmult="1" color="#F2ACAD"/>
+    <space row="2" col="2" label="DW" wmult="2" lmult="1" color="#F2ACAD"/>
+    <space row="3" col="3" label="DW" wmult="2" lmult="1" color="#F2ACAD"/>
+    <space row="4" col="4" label="DW" wmult="2" lmult="1" color="#F2ACAD"/>
+    <space row="10" col="10" label="DW" wmult="2" lmult="1" color="#F2ACAD"/>
+    <space row="11" col="11" label="DW" wmult="2" lmult="1" color="#F2ACAD"/>
+    <space row="12" col="12" label="DW" wmult="2" lmult="1" color="#F2ACAD"/>
+    <space row="13" col="13" label="DW" wmult="2" lmult="1" color="#F2ACAD"/>
+    <space row="1" col="13" label="DW" wmult="2" lmult="1" color="#F2ACAD"/>
+    <space row="2" col="12" label="DW" wmult="2" lmult="1" color="#F2ACAD"/>
+    <space row="3" col="11" label="DW" wmult="2" lmult="1" color="#F2ACAD"/>
+    <space row="4" col="10" label="DW" wmult="2" lmult="1" color="#F2ACAD"/>
+    <space row="10" col="4" label="DW" wmult="2" lmult="1" color="#F2ACAD"/>
+    <space row="11" col="3" label="DW" wmult="2" lmult="1" color="#F2ACAD"/>
+    <space row="12" col="2" label="DW" wmult="2" lmult="1" color="#F2ACAD"/>
+    <space row="13" col="1" label="DW" wmult="2" lmult="1" color="#F2ACAD"/>
     <!-- Triple letter score -->
-    <space row="1" col="5" label="Triple letter score" wmult="1" lmult="3" color="#5CACD7"/>
-    <space row="1" col="9" label="Triple letter score" wmult="1" lmult="3" color="#5CACD7"/>
-    <space row="5" col="1" label="Triple letter score" wmult="1" lmult="3" color="#5CACD7"/>
-    <space row="5" col="5" label="Triple letter score" wmult="1" lmult="3" color="#5CACD7"/>
-    <space row="5" col="9" label="Triple letter score" wmult="1" lmult="3" color="#5CACD7"/>
-    <space row="5" col="13" label="Triple letter score" wmult="1" lmult="3" color="#5CACD7"/>
-    <space row="9" col="1" label="Triple letter score" wmult="1" lmult="3" color="#5CACD7"/>
-    <space row="9" col="5" label="Triple letter score" wmult="1" lmult="3" color="#5CACD7"/>
-    <space row="9" col="9" label="Triple letter score" wmult="1" lmult="3" color="#5CACD7"/>
-    <space row="9" col="13" label="Triple letter score" wmult="1" lmult="3" color="#5CACD7"/>
-    <space row="13" col="5" label="Triple letter score" wmult="1" lmult="3" color="#5CACD7"/>
-    <space row="13" col="9" label="Triple letter score" wmult="1" lmult="3" color="#5CACD7"/>
+    <space row="1" col="5" label="TL" wmult="1" lmult="3" color="#5CACD7"/>
+    <space row="1" col="9" label="TL" wmult="1" lmult="3" color="#5CACD7"/>
+    <space row="5" col="1" label="TL" wmult="1" lmult="3" color="#5CACD7"/>
+    <space row="5" col="5" label="TL" wmult="1" lmult="3" color="#5CACD7"/>
+    <space row="5" col="9" label="TL" wmult="1" lmult="3" color="#5CACD7"/>
+    <space row="5" col="13" label="TL" wmult="1" lmult="3" color="#5CACD7"/>
+    <space row="9" col="1" label="TL" wmult="1" lmult="3" color="#5CACD7"/>
+    <space row="9" col="5" label="TL" wmult="1" lmult="3" color="#5CACD7"/>
+    <space row="9" col="9" label="TL" wmult="1" lmult="3" color="#5CACD7"/>
+    <space row="9" col="13" label="TL" wmult="1" lmult="3" color="#5CACD7"/>
+    <space row="13" col="5" label="TL" wmult="1" lmult="3" color="#5CACD7"/>
+    <space row="13" col="9" label="TL" wmult="1" lmult="3" color="#5CACD7"/>
     <!-- Double letter score-->
-    <space row="0" col="3" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="0" col="11" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="2" col="6" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="2" col="8" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="3" col="0" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="3" col="7" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="3" col="14" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="6" col="6" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="6" col="8" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="6" col="2" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="6" col="12" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="7" col="3" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="7" col="11" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="14" col="3" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="14" col="11" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="12" col="6" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="12" col="8" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="11" col="0" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="11" col="7" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="11" col="14" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="8" col="6" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="8" col="8" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="8" col="2" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
-    <space row="8" col="12" label="Double letter score" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="0" col="3" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="0" col="11" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="2" col="6" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="2" col="8" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="3" col="0" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="3" col="7" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="3" col="14" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="6" col="6" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="6" col="8" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="6" col="2" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="6" col="12" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="7" col="3" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="7" col="11" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="14" col="3" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="14" col="11" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="12" col="6" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="12" col="8" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="11" col="0" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="11" col="7" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="11" col="14" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="8" col="6" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="8" col="8" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="8" col="2" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
+    <space row="8" col="12" label="DL" wmult="1" lmult="2" color="#BDE5F4"/>
   </special>
 </board>

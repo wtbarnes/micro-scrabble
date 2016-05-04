@@ -9,37 +9,52 @@ from random import randrange
 class Game(object):
     """Parent game class, set the rules"""
 
-    def __init__(self, name='Untitled', max_rack_letters=7, letter_ratio_file=os.path.join(os.path.dirname(os.path.realpath(__file__)),'config','letter_ratios_en-us.xml'), board_setup_file=os.path.join(os.path.dirname(os.path.realpath(__file__)),'config','board_config.xml')):
+    def __init__(self, name='Untitled', max_rack_letters=7, letter_ratio_file=os.path.join(os.path.dirname(os.path.realpath(__file__)),'config','letter_ratios_en-us.xml'), board_setup_file=os.path.join(os.path.dirname(os.path.realpath(__file__)),'config','board_config.xml'),board_matrix=[],dims=(),letters=[]):
         """Set up the board and tile bag, add the players"""
         self.name = name
         self.logger = logging.getLogger(type(self).__name__)
         self.max_rack_letters = max_rack_letters
         self.players = {}
-        self.board = Board(board_setup_file)
-        self.tilebag = TileBag(letter_ratio_file)
+        self.board = Board(board_setup_file=board_setup_file, board_matrix=board_matrix, dims=dims)
+        self.tilebag = TileBag(letter_ratio_file,letters)
 
-    def add_players(self,num_players=2,player_names=[],max_players=4):
+    def add_players(self, num_players=2, player_names=[], max_players=4, scores=[], letter_racks=[]):
         if num_players > max_players:
             raise ValueError('Exceeded maximum number of players %d.'%max_players)
-
         if player_names and len(player_names) != num_players:
             raise ValueError('List of player names must be equal to number of players.')
-
         for i in range(num_players):
             if not player_names:
                 pname='player%d'%(i)
             else:
                 pname=player_names[i]
-            self.players[pname] = Player(self.tilebag,self.max_rack_letters,name=pname)
+            if not scores:
+                score = 0
+            else:
+                score = scores[pname]
+            if not letter_racks:
+                letter_rack = []
+            else:
+                letter_rack = letter_racks[pname]
+            self.players[pname] = Player(self.tilebag, self.max_rack_letters, name=pname, letter_rack=letter_rack, score=score)
 
 
 class Board(object):
     """Scrabble board class"""
 
-    def __init__(self, board_setup_file, default_color='#BBB89E'):
+    def __init__(self, board_matrix=[],board_setup_file='',dims=()):
         """Setup scrabble board"""
+        if (not board_matrix or not dims) and not board_setup_file:
+            raise ValueError('Specify config file or preexisting board setup.')
         self.logger = logging.getLogger(type(self).__name__)
-        self.board_matrix = []
+        self.board_matrix = board_matrix
+        if not self.board_matrix:
+            self._setup_board(board_setup_file)
+        else:
+            self.dims = dims
+
+    def _setup_board(self,board_setup_file,default_color='#BBB89E'):
+        """Configure board"""
         tree = ET.parse(board_setup_file)
         root = tree.getroot()
         special_spaces = root.find('special')
@@ -48,8 +63,7 @@ class Board(object):
         self.dims = (nrows,ncols)
         for j in range(ncols):
             for i in range(nrows):
-                self.board_matrix.append({'label':None, 'wmult':1, 'lmult':1, 'letter':None, 'x':j, 'y':i, 'color':default_color})
-
+                self.board_matrix.append({'label':None, 'wmult':1, 'lmult':1, 'letter':None, 'x':j, 'y':i, 'color':default_color, 'points':0})
         for space in special_spaces:
             i_row,i_col = int(space.attrib['row']),int(space.attrib['col'])
             for square in self.board_matrix:
@@ -59,14 +73,30 @@ class Board(object):
                     square['lmult'] = space.attrib['lmult']
                     square['color'] = space.attrib['color']
 
+    def place_tiles(self,tiles):
+        """Put tiles from play on board"""
+        for t in tiles:
+            for i in range(len(self.board_matrix)):
+                if t['rpos'] == self.board_matrix[i]['y'] and t['cpos'] == self.board_matrix[i]['x']:
+                    self.board_matrix[i]['letter'] = t['letter']
+                    self.board_matrix[i]['points'] = t['points']
+                    break
 
 class TileBag(object):
     """Scrabble TileBag class"""
 
-    def __init__(self,letter_ratio_file):
+    def __init__(self,letter_ratio_file='',letters=[]):
         """Create the bag of letter tiles with appropriate ratios"""
+        if not letter_ratio_file and not letters:
+            raise ValueError('Specify existing letter bag or config file.')
+
         self.logger = logging.getLogger(type(self).__name__)
-        self.letters = []
+        self.letters = letters
+        if not self.letters:
+            self._make_bag(letter_ratio_file)
+
+    def _make_bag(self,letter_ratio_file):
+        """Construct tilebag"""
         tree = ET.parse(letter_ratio_file)
         root = tree.getroot()
         for child in root:
@@ -111,14 +141,13 @@ class TileBag(object):
 class Player(object):
     """Class to control player action and movement"""
 
-    def __init__(self,tilebag,max_rack_letters,name='player'):
+    def __init__(self,tilebag,max_rack_letters,name='player',letter_rack=[],score=0):
         """Create player"""
         self.logger = logging.getLogger(type(self).__name__)
         self.max_rack_letters=max_rack_letters
         self.name=name
-        self.score = 0
-        self.letter_rack = []
-        self.logger.info('Creating letter rack for player %s'%self.name)
+        self.score = score
+        self.letter_rack = letter_rack
         tilebag.draw_letters(self)
 
     def show_rack(self):

@@ -1,7 +1,41 @@
 from flask import Flask,render_template
 from micro_scrabble import app
-from forms import NewGameForm
+from micro_scrabble import db
+from forms import NewGameForm,PlayerForm,DrawLettersForm
+from models import GameArchive
 import game as scrabble
+
+#board config
+s = 50
+
+def update_game(instance,archive):
+    """Update SQL table"""
+    player_list,letter_racks,scores = [],{},{}
+    for key in instance.players:
+        player_list.append(key)
+        letter_racks[key] = instance.players[key].letter_rack
+        scores[key] = instance.players[key].score
+    archive.board_matrix = instance.board.board_matrix
+    archive.letters = instance.tilebag.letters
+    archive.letter_racks = letter_racks
+    archive.scores = scores
+    db.session.commit()
+
+
+def pack_game(instance):
+    """Put class instance into a SQL table"""
+    player_list,letter_racks,scores = [],{},{}
+    for key in instance.players:
+        player_list.append(key)
+        letter_racks[key] = instance.players[key].letter_rack
+        scores[key] = instance.players[key].score
+    return GameArchive(instance.name, instance.board.board_matrix, instance.tilebag.letters, instance.board.dims, instance.max_rack_letters, player_list, scores, letter_racks)
+
+def unpack_game(archive):
+    """Extract class instance from a SQL table"""
+    instance = scrabble.Game(name=archive.game_name, max_rack_letters=archive.max_rack_letters, letter_ratio_file='', board_setup_file='', board_matrix = archive.board_matrix, dims=archive.dims, letters=archive.letters)
+    instance.add_players(num_players=len(archive.players), player_names=archive.players, scores=archive.scores, letter_racks=archive.letter_racks)
+    return instance
 
 @app.route('/')
 @app.route('/index')
@@ -14,40 +48,56 @@ def new_game():
     #name,players = None,None
     create_game_form = NewGameForm()
     if create_game_form.validate_on_submit():
-        if not create_game_form.name.data:
-            name = 'Untitled Game'
-        else:
-            name = create_game_form.name.data
+        #split the string of player names
+        #TODO: error handling if this is not formatted correctly
         players = create_game_form.players.data.split(',')
-        game  = scrabble.Game(name=name)
+        #Instantiate class
+        game  = scrabble.Game(name=create_game_form.name.data)
+        #add players
         game.add_players(player_names=players,num_players=len(players))
-        cur_game(name)
+        #add to database
+        db.session.add(pack_game(game))
+        db.session.commit()
+        #pass to current game view
+        cur_game(game.name)
+        #create player pages
+        for p in players:
+            player_view(game.name,p)
+
     return render_template('new_game.html',form=create_game_form)
 
-
-@app.route('/game-<name>')
-def cur_game(name):
+@app.route('/game-<game_name>')
+def cur_game(game_name):
     """Current game page"""
-    s = 50
-    game  = scrabble.Game(name=name)
-    return render_template('board.html', name=game.name, height=game.board.dims[0]*s, width=game.board.dims[1]*s, square=s, board_matrix=game.board.board_matrix)
+    #make SQL request
+    game_archive = GameArchive.query.filter_by(game_name=game_name).first()
+    #rebuild class instance
+    game  = unpack_game(game_archive)
+    return render_template('board.html', name=game.name, height=game.board.dims[0]*s, width=game.board.dims[1]*s, square=s, board_matrix=game.board.board_matrix, player_list = [{'name':game.players[key].name,'score':game.players[key].score} for key in game.players])
 
 
 @app.route('/game-<game_name>/players/<player_name>',methods=['GET','POST'])
-def player(game,game_name,player_name):
+def player_view(game_name,player_name):
     """Player Page"""
+    #make SQL request
+    game_archive = GameArchive.query.filter_by(game_name=game_name).first()
+    #rebuild class instance
+    game = unpack_game(game_archive)
+    #make form
+    player_form = PlayerForm()
+    #validation for play submission
+    if player_form.validate_on_submit():
+        #play word
+        played_word = game.players[player_name].play_word(word=player_form.word_play.data, direction=player_form.direction.data, start_pos=(player_form.start_row.data,player_form.start_col.data))
+        #place tiles
+        game.board.place_tiles(played_word)
+        #draw letters
+        game.tilebag.draw_letters(game.players[player_name])
+        #update database
+        update_game(game,game_archive)
+        #db.session.add(pack_game(game))
+        #db.session.commit()
+        #render board
+        cur_game(game.name)
 
-
-@app.route('/board')
-def render_board():
-    s = 50
-    game = scrabble.Game()
-    game.board.board_matrix[34]['letter'] = 'F'
-    game.board.board_matrix[35]['letter'] = 'O'
-    game.board.board_matrix[36]['letter'] = 'O'
-    game.board.board_matrix[49]['letter'] = 'A'
-    game.board.board_matrix[64]['letter'] = 'L'
-    game.board.board_matrix[79]['letter'] = 'S'
-    game.board.board_matrix[94]['letter'] = 'E'
-
-    return render_template('board.html', height=game.board.dims[0]*s, width=game.board.dims[1]*s, square=s, board_matrix=game.board.board_matrix)
+    return render_template('player.html', form=player_form, letter_rack=game.players[player_name].letter_rack, num_letters=len(game.players[player_name].letter_rack), name=player_name, square=2*s)

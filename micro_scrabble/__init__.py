@@ -2,6 +2,7 @@ import os,sys
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 from flask import Flask
 from flask_bootstrap import Bootstrap
+from flask_sqlalchemy import SQLAlchemy
 
 def create_app():
     app = Flask(__name__)
@@ -11,6 +12,8 @@ def create_app():
 app = create_app()
 app.config['WTF_CSRF_ENABLED'] = True
 app.config['SECRET_KEY'] = 'you-will-never-guess'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' +  os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))),'db','micro_scrabble.db')
+db = SQLAlchemy(app)
 #app.config.from_object('flask_config')
 
 from micro_scrabble import views
