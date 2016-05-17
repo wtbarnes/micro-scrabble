@@ -15,10 +15,10 @@ def update_game(instance,archive):
         player_list.append(key)
         letter_racks[key] = instance.players[key].letter_rack
         scores[key] = instance.players[key].score
-    archive.board_matrix = instance.board.board_matrix
-    archive.letters = instance.tilebag.letters
-    archive.letter_racks = letter_racks
-    archive.scores = scores
+    archive.update({'board_matrix':instance.board.board_matrix,
+    'letters':instance.tilebag.letters,
+    'letter_racks':letter_racks,
+    'scores':scores})
     db.session.commit()
 
 
@@ -33,8 +33,8 @@ def pack_game(instance):
 
 def unpack_game(archive):
     """Extract class instance from a SQL table"""
-    instance = scrabble.Game(name=archive.game_name, max_rack_letters=archive.max_rack_letters, letter_ratio_file='', board_setup_file='', board_matrix = archive.board_matrix, dims=archive.dims, letters=archive.letters)
-    instance.add_players(num_players=len(archive.players), player_names=archive.players, scores=archive.scores, letter_racks=archive.letter_racks)
+    instance = scrabble.Game(name=archive.first().game_name, max_rack_letters=archive.first().max_rack_letters, letter_ratio_file='', board_setup_file='', board_matrix = archive.first().board_matrix, dims=archive.first().dims, letters=archive.first().letters)
+    instance.add_players(num_players=len(archive.first().players), player_names=archive.first().players, scores=archive.first().scores, letter_racks=archive.first().letter_racks)
     return instance
 
 @app.route('/')
@@ -56,9 +56,9 @@ def new_game():
         #add players
         game.add_players(player_names=players,num_players=len(players))
         #add to database
-        db.session.add(pack_game(game))
+        game_archive = pack_game(game)
+        db.session.add(game_archive)
         db.session.commit()
-        #pass to current game view
         cur_game(game.name)
         #create player pages
         for p in players:
@@ -66,11 +66,26 @@ def new_game():
 
     return render_template('new_game.html',form=create_game_form)
 
+@app.route('/current_games')
+def show_games():
+    """List all current games"""
+    all_games = GameArchive.query.all()
+    return render_template('current_games.html',games=all_games)
+
+@app.route('/delete-game-<game_name>')
+def delete_game(game_name):
+    """Delete game from database"""
+    game_archive = GameArchive.query.filter_by(game_name=game_name).first()
+    db.session.delete(game_archive)
+    db.session.commit()
+    all_games = GameArchive.query.all()
+    return render_template('current_games.html',games=all_games)
+
 @app.route('/game-<game_name>')
 def cur_game(game_name):
     """Current game page"""
     #make SQL request
-    game_archive = GameArchive.query.filter_by(game_name=game_name).first()
+    game_archive = GameArchive.query.filter_by(game_name=game_name)
     #rebuild class instance
     game  = unpack_game(game_archive)
     return render_template('board.html', name=game.name, height=game.board.dims[0]*s, width=game.board.dims[1]*s, square=s, board_matrix=game.board.board_matrix, player_list = [{'name':game.players[key].name,'score':game.players[key].score} for key in game.players])
@@ -80,7 +95,7 @@ def cur_game(game_name):
 def player_view(game_name,player_name):
     """Player Page"""
     #make SQL request
-    game_archive = GameArchive.query.filter_by(game_name=game_name).first()
+    game_archive = GameArchive.query.filter_by(game_name=game_name)
     #rebuild class instance
     game = unpack_game(game_archive)
     #make form
@@ -95,8 +110,6 @@ def player_view(game_name,player_name):
         game.tilebag.draw_letters(game.players[player_name])
         #update database
         update_game(game,game_archive)
-        #db.session.add(pack_game(game))
-        #db.session.commit()
         #render board
         cur_game(game.name)
 

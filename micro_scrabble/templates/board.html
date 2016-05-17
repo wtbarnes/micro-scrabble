@@ -27,7 +27,7 @@
         <tbody>
       {% for p in player_list %}
       <tr>
-        <td>{{ p.name }}</td>
+        <td><a href="/game-{{ name }}/players/{{ p.name }}">{{ p.name }}</a></td>
         <td>{{ p.score }}</td>
       </tr>
       {% endfor %}

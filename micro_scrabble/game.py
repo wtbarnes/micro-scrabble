@@ -9,14 +9,16 @@ from random import randrange
 class Game(object):
     """Parent game class, set the rules"""
 
-    def __init__(self, name='Untitled', max_rack_letters=7, letter_ratio_file=os.path.join(os.path.dirname(os.path.realpath(__file__)),'config','letter_ratios_en-us.xml'), board_setup_file=os.path.join(os.path.dirname(os.path.realpath(__file__)),'config','board_config.xml'),board_matrix=[],dims=(),letters=[]):
+    def __init__(self, name='Untitled', max_rack_letters=7, letter_ratio_file=os.path.join(os.path.dirname(os.path.realpath(__file__)),'config','letter_ratios_en-us.xml'), board_setup_file=os.path.join(os.path.dirname(os.path.realpath(__file__)),'config','board_config.xml'),board_matrix=[],dims=[],letters=[]):
         """Set up the board and tile bag, add the players"""
         self.name = name
         self.logger = logging.getLogger(type(self).__name__)
+        self.logger.debug('Configuring game with name %s'%self.name)
         self.max_rack_letters = max_rack_letters
         self.players = {}
         self.board = Board(board_setup_file=board_setup_file, board_matrix=board_matrix, dims=dims)
         self.tilebag = TileBag(letter_ratio_file,letters)
+
 
     def add_players(self, num_players=2, player_names=[], max_players=4, scores=[], letter_racks=[]):
         if num_players > max_players:
@@ -42,25 +44,29 @@ class Game(object):
 class Board(object):
     """Scrabble board class"""
 
-    def __init__(self, board_matrix=[],board_setup_file='',dims=()):
+    def __init__(self, board_matrix=[],board_setup_file='',dims=[]):
         """Setup scrabble board"""
-        if (not board_matrix or not dims) and not board_setup_file:
-            raise ValueError('Specify config file or preexisting board setup.')
         self.logger = logging.getLogger(type(self).__name__)
-        self.board_matrix = board_matrix
-        if not self.board_matrix:
+        if board_setup_file:
+            self.logger.debug('Configuring board from setup file %s'%(board_setup_file))
             self._setup_board(board_setup_file)
-        else:
+        elif dims and board_matrix:
+            self.board_matrix = board_matrix
             self.dims = dims
+        else:
+            self.logger.error('Specify config file or preexisting board setup.')
 
     def _setup_board(self,board_setup_file,default_color='#BBB89E'):
         """Configure board"""
+        self.logger.debug('Setting up board')
         tree = ET.parse(board_setup_file)
         root = tree.getroot()
         special_spaces = root.find('special')
         dims = root.find('dimensions')
         nrows,ncols = int(dims.attrib['rows']),int(dims.attrib['cols'])
-        self.dims = (nrows,ncols)
+        self.dims = [nrows,ncols]
+        self.board_matrix = []
+        self.logger.debug('Setting board dimensions to (%d,%d)'%(self.dims[0],self.dims[1]))
         for j in range(ncols):
             for i in range(nrows):
                 self.board_matrix.append({'label':None, 'wmult':1, 'lmult':1, 'letter':None, 'x':j, 'y':i, 'color':default_color, 'points':0})

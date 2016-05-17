@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Scrabble | Current Games{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1>Current Games</h1>
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Players</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+      {% for g in games %}
+      <tr>
+        <td><i class="fa fa-gamepad fa-lg"></i>&emsp;<a href="game-{{g.game_name}}">{{ g.game_name }}</a></td>
+        <td>{% for p in g.players %}<a href="game-{{g.game_name}}/players/{{p}}">{{ p }}</a> {% endfor %}</td>
+        <td><p class="text-right"><a href="delete-game-{{g.game_name}}"><i class="fa fa-trash fa-lg "></i></a></p></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
