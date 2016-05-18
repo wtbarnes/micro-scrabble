@@ -35,6 +35,8 @@
     </table>
     </div>
   </div>
+  <div class="row">
+  </div>
 </div>
   <script type="text/javascript" charset="utf-8">
     //create javascript object from python dictionary
@@ -64,7 +66,7 @@
                           .attr("fill",function(d){return d.color;})
                           .attr("stroke",'#fff');
 
-    var board_labels = rectangles.append('text')
+    var letter_labels = rectangles.append('text')
               .text(function(d){
                 if(d.letter==null){
                   return d.label;}
@@ -76,7 +78,20 @@
               .attr("font-family","helvetica")
               .attr("font-size",function(d){if(d.letter){return "25px";}else{return "15px";}})
               .attr("font-weight",function(d){if(d.letter){return "bold";}else{return "normal";}})
-              .attr("dy", "2em")
+              .attr("dy", function(d){if(d.letter){return "1.4em";}else{return "2em";}})
+              .attr("text-anchor","middle");
+
+    var point_labels = rectangles.append('text')
+              .text(function(d){
+                if(d.points>0){
+                  return d.points.toString();}
+                })
+              .attr("x",function(d){return d.x*{{ square }}+0.8*{{ square }};})
+              .attr("y",function(d){return d.y*{{ square }}+{{ square }}*0.65;})
+              .attr("font-family","helvetica")
+              .attr("font-size","12.5px")
+              .attr("font-weight","bold")
+              .attr("dy","1em")
               .attr("text-anchor","middle");
 
     //d3plus.textwrap().container(board_labels).resize(true).draw()

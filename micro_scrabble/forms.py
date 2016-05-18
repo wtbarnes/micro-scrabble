@@ -16,6 +16,7 @@ class PlayerForm(Form):
     direction = RadioField('Direction of word', validators=[Required()], choices=[('horizontal','Horizontal'),('vertical','Vertical')], default='hor')
     submit = SubmitField('Play!')
 
-class DrawLettersForm(Form):
+class SwapLettersForm(Form):
     """Click to draw new letters"""
-    submit = SubmitField('Draw Letters')
+    letter = StringField('Letter to Swap')
+    submit = SubmitField('Swap Letter')

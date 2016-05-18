@@ -1,7 +1,7 @@
 from flask import Flask,render_template
 from micro_scrabble import app
 from micro_scrabble import db
-from forms import NewGameForm,PlayerForm,DrawLettersForm
+from forms import NewGameForm,PlayerForm,SwapLettersForm
 from models import GameArchive
 import game as scrabble
 
@@ -98,8 +98,10 @@ def player_view(game_name,player_name):
     game_archive = GameArchive.query.filter_by(game_name=game_name)
     #rebuild class instance
     game = unpack_game(game_archive)
-    #make form
+    #make submit form
     player_form = PlayerForm()
+    #make swap letter form
+    swap_form = SwapLettersForm()
     #validation for play submission
     if player_form.validate_on_submit():
         #play word
@@ -110,7 +112,10 @@ def player_view(game_name,player_name):
         game.tilebag.draw_letters(game.players[player_name])
         #update database
         update_game(game,game_archive)
-        #render board
-        cur_game(game.name)
+    elif swap_form.validate_on_submit():
+        #swap_letter
+        game.tilebag.swap_letter(game.players[player_name],swap_form.letter.data)
+        #update database
+        update_game(game,game_archive)
 
-    return render_template('player.html', form=player_form, letter_rack=game.players[player_name].letter_rack, num_letters=len(game.players[player_name].letter_rack), name=player_name, square=2*s)
+    return render_template('player.html', submit_form=player_form, swap_form=swap_form, letter_rack=game.players[player_name].letter_rack, num_letters=len(game.players[player_name].letter_rack), name=player_name, square=2*s)

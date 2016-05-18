@@ -16,7 +16,8 @@
     <div class="col-md-10">
     <h1>{{ name }}</h1>
     <section id="rack"/>
-    {{ wtf.quick_form(form) }}
+    {{ wtf.quick_form(submit_form) }}
+    {{ wtf.quick_form(swap_form) }}
     </div>
     <div class="col-md-1">
     </div>
@@ -44,10 +45,10 @@
                         .attr("height",{{ square }})
                         .attr("x",function(d,i){return i*{{ square }};})
                         .attr("y",0)
-                        .attr("fill","#BBB89E")
+                        .attr("fill","#E1BF9A")
                         .attr("stroke",'#fff');
 
-  var board_labels = rectangles.append('text')
+  var letter_rack = rectangles.append('text')
             .text(function(d){return d.letter;})
             .attr("x",function(d,i){return i*{{ square }}+{{ square }}/2;})
             .attr("y",0)
@@ -55,6 +56,16 @@
             .attr("font-size","50px")
             .attr("font-weight","bold")
             .attr("dy", "1.25em")
+            .attr("text-anchor","middle");
+
+  var letter_points = rectangles.append('text')
+            .text(function(d){return d.points.toString();})
+            .attr("x",function(d,i){return i*{{ square }}+0.8*{{ square }};})
+            .attr("y",0.65*{{square}})
+            .attr("font-family","helvetica")
+            .attr("font-size","25px")
+            .attr("font-weight","bold")
+            .attr("dy", "1em")
             .attr("text-anchor","middle");
 </script>
 {% endblock %}

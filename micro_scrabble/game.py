@@ -79,13 +79,14 @@ class Board(object):
                     square['lmult'] = space.attrib['lmult']
                     square['color'] = space.attrib['color']
 
-    def place_tiles(self,tiles):
+    def place_tiles(self,tiles,tile_color='#E1BF9A'):
         """Put tiles from play on board"""
         for t in tiles:
             for i in range(len(self.board_matrix)):
                 if t['rpos'] == self.board_matrix[i]['y'] and t['cpos'] == self.board_matrix[i]['x']:
                     self.board_matrix[i]['letter'] = t['letter']
                     self.board_matrix[i]['points'] = t['points']
+                    self.board_matrix[i]['color'] = tile_color
                     break
 
 class TileBag(object):
