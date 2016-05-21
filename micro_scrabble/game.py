@@ -162,12 +162,8 @@ class Player(object):
         for lr in self.letter_rack:
             print('%s, %d'%(lr['letter'],lr['points']))
 
-    def play_word(self,word='',direction='horizontal',start_pos=(0,0)):
+    def play_word(self,word='',tile_pos=[]):
         """Make a word"""
-        if direction=='horizontal':
-            d=(0,1)
-        else:
-            d=(1,0)
         word_letters = list(word.upper())
         rack_copy = list(self.letter_rack)
         word_play = []
@@ -175,7 +171,7 @@ class Player(object):
             found_flag=False
             for lr,j in zip(rack_copy,range(len(rack_copy))):
                 if wl == lr['letter']:
-                    word_play.append({'letter':wl, 'points':lr['points'], 'rpos':start_pos[0] + i*d[0], 'cpos':start_pos[1] + i*d[1]})
+                    word_play.append({'letter':wl, 'points':lr['points'], 'rpos':tile_pos[i][0], 'cpos':tile_pos[i][1]})
                     found_flag=True
                     rack_copy.pop(j)
                     break

@@ -3,18 +3,20 @@
 {% block head %}
   {{ super() }}
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
-  <link href="static/base.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='stylesheets/base.css') }}" rel="stylesheet">
+  {% block scripts %}
+    {{ super() }}
+    <script type="text/javascript" src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="http://www.d3plus.org/js/d3plus.js"></script>
+  {% endblock %}
 {% endblock %}
 
 {% block navbar %}
 <div class="navbar navbar-static-top">
-  <div class="navbar-header">
-    <a class="navbar-brand" href="#">{{ title }}</a>
-  </div>
   <ul class="nav navbar-nav">
-    <li class="active"><a href="/index">Home</a></li>
-    <li><a href="/new_game">New Game</a></li>
-    <li><a href="/current_games">Current Games</a></li>
+    <li class="lead"><a href="/index">Home</a></li>
+    <li class="lead"><a href="/new_game">New Game</a></li>
+    <li class="lead"><a href="/current_games">Current Games</a></li>
   </ul>
 </div>
 <div class="navbar navbar-default navbar-fixed-bottom">

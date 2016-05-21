@@ -1,2 +1,29 @@
 {% extends "base.html" %}
 {% block title %}Scrabble{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row" style="padding-bottom:20px">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-10">
+      <img src="{{ url_for('static', filename='img/scrabble_logo.png') }}" class="img-responsive">
+    </div>
+    <div class="col-md-1">
+    </div>
+  </div>
+  <div class="row add_space">
+    <div class="col-md-4">
+      <h2>Create and Play!</h2>
+      <p class="lead">Create a game using the menu above. Add up to four friends. Create as many games as you want and save them for later!</p>
+    </div>
+    <div class="col-md-4">
+      <h2>Deploy!</h2>
+      <p class="lead">Because micro-scrabble is built on top of a web application, it can easily be run on a machine like a <a href="https://www.raspberrypi.org/">Raspberry Pi</a>, with players logging in and playing in the browser. Once you have the needed dependencies, just spin up the server!</p>
+    </div>
+    <div class="col-md-4">
+      <h2>Develop!</h2>
+      <p class="lead">This application is built with Python and the micro web framework <a href="http://flask.pocoo.org/">Flask</a>. Fork the repository on <a href="">GitHub</a> and hack away! There's still much work to be done.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

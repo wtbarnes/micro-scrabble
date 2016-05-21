@@ -104,8 +104,10 @@ def player_view(game_name,player_name):
     swap_form = SwapLettersForm()
     #validation for play submission
     if player_form.validate_on_submit():
+        #parse tile positions
+        tile_pos = [(int(r),int(c)) for r,c in zip(player_form.rows.data.split(','), player_form.cols.data.split(','))]
         #play word
-        played_word = game.players[player_name].play_word(word=player_form.word_play.data, direction=player_form.direction.data, start_pos=(player_form.start_row.data,player_form.start_col.data))
+        played_word = game.players[player_name].play_word(word=player_form.word_play.data,  tile_pos=tile_pos)
         #place tiles
         game.board.place_tiles(played_word)
         #draw letters

@@ -1,23 +1,32 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% block title %}Scrabble | Player {{ name }}{% endblock %}
-{% block head %}
-  {{ super() }}
-  {% block scripts %}
-    {{ super() }}
-    <script type="text/javascript" src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-  {% endblock %}
-{% endblock %}
+
 {%block content %}
 <div class="container">
-  <div class="row">
+  <div class="row" style="padding-bottom:10px">
     <div class="col-md-1">
     </div>
     <div class="col-md-10">
     <h1>{{ name }}</h1>
-    <section id="rack"/>
     {{ wtf.quick_form(submit_form) }}
+    </div>
+    <div class="col-md-1">
+    </div>
+  </div>
+  <div class="row" style="padding-bottom:25px">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-10">
     {{ wtf.quick_form(swap_form) }}
+    </div>
+    <div class="col-md-1">
+    </div>
+  </div>
+  <div class="row add_space">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-10" id="rack">
     </div>
     <div class="col-md-1">
     </div>

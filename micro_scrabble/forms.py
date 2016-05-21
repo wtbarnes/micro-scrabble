@@ -11,9 +11,8 @@ class NewGameForm(Form):
 class PlayerForm(Form):
     """Show player rack and options"""
     word_play = StringField('Word to play:',validators=[Required()])
-    start_row = IntegerField('Row to put the first tile:',validators=[Required()])
-    start_col = IntegerField('Column to put the first tile:',validators=[Required()])
-    direction = RadioField('Direction of word', validators=[Required()], choices=[('horizontal','Horizontal'),('vertical','Vertical')], default='hor')
+    rows = StringField('Row positions (comma delimited):',validators=[Required()])
+    cols = StringField('Column positions (comma delimited):',validators=[Required()])
     submit = SubmitField('Play!')
 
 class SwapLettersForm(Form):
