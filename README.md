@@ -10,3 +10,4 @@ Flask web app for playing scrabble with the Raspberry Pi
 - [ ] Ability to remove letters from board
 - [ ] Position checking on board: cannot overlap, have to be connected to existing word
 - [ ] User login
+- [ ] Error handling
