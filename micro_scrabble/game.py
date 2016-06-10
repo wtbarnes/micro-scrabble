@@ -40,6 +40,9 @@ class Game(object):
                 letter_rack = letter_racks[pname]
             self.players[pname] = Player(self.tilebag, self.max_rack_letters, name=pname, letter_rack=letter_rack, score=score)
 
+    def score_word(self,word,player):
+        """Calculate score of a play and increment player score"""
+
 
 class Board(object):
     """Scrabble board class"""
