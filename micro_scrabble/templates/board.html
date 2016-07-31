@@ -18,7 +18,7 @@
         <tbody>
       {% for p in player_list %}
       <tr>
-        <td><a href="/game-{{ name }}/players/{{ p.name }}">{{ p.name }}</a></td>
+        <td>{%if p.your_turn%}<i class="fa fa-check text-success"></i> {%endif%}<a href="/game-{{ name }}/players/{{ p.name }}">{{ p.name }}</a></td>
         <td>{{ p.score }}</td>
       </tr>
       {% endfor %}

@@ -9,7 +9,13 @@
     </div>
     <div class="col-md-10">
     <h1>{{ name }}</h1>
+    {% if not your_turn %}
+    <div class="alert alert-danger">
+      <b>Hold On!</b> It's not your turn yet.
+    </div>
+    {% else %}
     {{ wtf.quick_form(submit_form) }}
+    {% endif %}
     </div>
     <div class="col-md-1">
     </div>
@@ -18,7 +24,9 @@
     <div class="col-md-1">
     </div>
     <div class="col-md-10">
+    {% if your_turn %}
     {{ wtf.quick_form(swap_form) }}
+    {% endif %}
     </div>
     <div class="col-md-1">
     </div>

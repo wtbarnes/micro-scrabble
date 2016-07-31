@@ -11,8 +11,9 @@ class GameArchive(db.Model):
     players = db.Column(db.PickleType)#,unique=True)
     scores = db.Column(db.PickleType)#,unique=True)
     letter_racks = db.Column(db.PickleType)#,unique=True)
+    player_order = db.Column(db.PickleType)
 
-    def __init__(self, game_name, board_matrix, letters, dims, max_rack_letters, players, scores, letter_racks):
+    def __init__(self, game_name, board_matrix, letters, dims, max_rack_letters, players, scores, letter_racks, player_order):
         """Build SQL Table"""
         self.game_name = game_name
         self.board_matrix = board_matrix
@@ -22,6 +23,7 @@ class GameArchive(db.Model):
         self.players = players
         self.scores = scores
         self.letter_racks = letter_racks
+        self.player_order = player_order
 
     def __repr__(self):
         return '<Name %r>'%self.game_name

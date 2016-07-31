@@ -4,7 +4,8 @@ import os
 import sys
 import logging
 import xml.etree.ElementTree as ET
-from random import randrange
+import random
+
 
 class Game(object):
     """Parent game class, set the rules"""
@@ -20,7 +21,7 @@ class Game(object):
         self.tilebag = TileBag(letter_ratio_file,letters)
 
 
-    def add_players(self, num_players=2, player_names=[], max_players=4, scores=[], letter_racks=[]):
+    def add_players(self, num_players=2, player_names=[], max_players=4, scores=[], letter_racks=[],player_order=[]):
         if num_players > max_players:
             raise ValueError('Exceeded maximum number of players %d.'%max_players)
         if player_names and len(player_names) != num_players:
@@ -40,8 +41,17 @@ class Game(object):
                 letter_rack = letter_racks[pname]
             self.players[pname] = Player(self.tilebag, self.max_rack_letters, name=pname, letter_rack=letter_rack, score=score)
 
+        if not player_order:
+            self.player_order = [s[0] for s in sorted([(pname,random.random()) for pname in self.players],key=lambda x:x[1])]
+        else:
+            self.player_order = player_order
+
+
     def score_word(self,word,player):
         """Calculate score of a play and increment player score"""
+        #get the coordinates of the last play
+        #traverse the board and add the score appropriately (hard...)
+        #add score to player
 
 
 class Board(object):
@@ -135,7 +145,7 @@ class TileBag(object):
 
     def _draw_letter(self,player):
         """Draw a letter from the bag, add it to the rack of a player instance"""
-        i_draw = randrange(0,len(self.letters))
+        i_draw = random.randrange(0,len(self.letters))
         player.letter_rack.append(self.letters[i_draw])
         self.letters.pop(i_draw)
 
