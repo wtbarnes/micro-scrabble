@@ -6,6 +6,8 @@ import logging
 import xml.etree.ElementTree as ET
 import random
 
+from models import GameArchive
+
 
 class Game(object):
     """Parent game class, set the rules"""
@@ -19,7 +21,6 @@ class Game(object):
         self.players = {}
         self.board = Board(board_setup_file=board_setup_file, board_matrix=board_matrix, dims=dims)
         self.tilebag = TileBag(letter_ratio_file,letters)
-
 
     def add_players(self, num_players=2, player_names=[], max_players=4, scores=[], letter_racks=[],player_order=[]):
         if num_players > max_players:
@@ -39,19 +40,72 @@ class Game(object):
                 letter_rack = []
             else:
                 letter_rack = letter_racks[pname]
-            self.players[pname] = Player(self.tilebag, self.max_rack_letters, name=pname, letter_rack=letter_rack, score=score)
+            self.players[pname] = Player(self.tilebag, self.max_rack_letters,
+                                        name=pname, letter_rack=letter_rack, score=score)
 
         if not player_order:
-            self.player_order = [s[0] for s in sorted([(pname,random.random()) for pname in self.players],key=lambda x:x[1])]
+            self.player_order = [s[0] for s in sorted([(pname,random.random()) \
+                                    for pname in self.players],key=lambda x:x[1])]
         else:
             self.player_order = player_order
 
+    def archive(self,db,archive=None):
+        """
+        Put class instance into a SQL table
+        """
+        player_list,letter_racks,scores = [],{},{}
+        for key in self.players:
+            player_list.append(key)
+            letter_racks[key] = self.players[key].letter_rack
+            scores[key] = self.players[key].score
 
-    def score_word(self,word,player):
-        """Calculate score of a play and increment player score"""
-        #get the coordinates of the last play
-        #traverse the board and add the score appropriately (hard...)
+        #if a database and entry have been passed, update database
+        if archive:
+            archive.update({'board_matrix':self.board.board_matrix,
+            'letters':self.tilebag.letters,'letter_racks':letter_racks,
+            'scores':scores,'player_order':self.player_order})
+        else:
+            archive = GameArchive(self.name, self.board.board_matrix,
+                                    self.tilebag.letters, self.board.dims,
+                                    self.max_rack_letters, player_list, scores,
+                                    letter_racks, self.player_order)
+            db.session.add(archive)
+        db.session.commit()
+
+    @classmethod
+    def unarchive(cls,archive):
+        """
+        Restore game state from SQL entry
+        """
+        game = cls(name=archive.first().game_name,
+                            max_rack_letters=archive.first().max_rack_letters,
+                            letter_ratio_file='', board_setup_file='',
+                            board_matrix = archive.first().board_matrix,
+                            dims=archive.first().dims, letters=archive.first().letters)
+        game.add_players(num_players=len(archive.first().players),
+                        player_names=archive.first().players,
+                        scores=archive.first().scores,
+                        letter_racks=archive.first().letter_racks,
+                        player_order=archive.first().player_order)
+        return game
+
+    def score_word(self,word_coords,player_name):
+        """
+        Calculate score of a play and increment player score
+        """
+        score,wmult = 0,1
+        #sum points of played word
+        for wc in word_coords:
+            score += self.board.board_matrix[wc]['points']\
+                    *self.board.board_matrix[wc]['lmult']
+            wmult *= self.board.board_matrix[wc]['wmult']
+
+        score *= wmult
+        #TODO:traverse the board and add the score appropriately (hard...)
+        #FIXME:really need to walk the board until we find an empty letter since the played words do not have all of the letters in them that the scoring word does
         #add score to player
+
+        self.players[player_name].score += score
 
 
 class Board(object):
@@ -88,19 +142,24 @@ class Board(object):
             for square in self.board_matrix:
                 if square['x'] == i_col and square['y'] == i_row:
                     square['label'] = space.attrib['label']
-                    square['wmult'] = space.attrib['wmult']
-                    square['lmult'] = space.attrib['lmult']
+                    square['wmult'] = int(space.attrib['wmult'])
+                    square['lmult'] = int(space.attrib['lmult'])
                     square['color'] = space.attrib['color']
 
     def place_tiles(self,tiles,tile_color='#E1BF9A'):
         """Put tiles from play on board"""
+        coords = []
         for t in tiles:
             for i in range(len(self.board_matrix)):
                 if t['rpos'] == self.board_matrix[i]['y'] and t['cpos'] == self.board_matrix[i]['x']:
                     self.board_matrix[i]['letter'] = t['letter']
                     self.board_matrix[i]['points'] = t['points']
                     self.board_matrix[i]['color'] = tile_color
+                    coords.append(i)
                     break
+
+        return coords
+
 
 class TileBag(object):
     """Scrabble TileBag class"""
@@ -180,11 +239,12 @@ class Player(object):
         word_letters = list(word.upper())
         rack_copy = list(self.letter_rack)
         word_play = []
-        for wl,i in zip(word_letters,range(len(word_letters))):
+        for i,wl in enumerate(word_letters):
             found_flag=False
-            for lr,j in zip(rack_copy,range(len(rack_copy))):
+            for j,lr in enumerate(rack_copy):
                 if wl == lr['letter']:
-                    word_play.append({'letter':wl, 'points':lr['points'], 'rpos':tile_pos[i][0], 'cpos':tile_pos[i][1]})
+                    word_play.append({'letter':wl, 'points':lr['points'],
+                                    'rpos':tile_pos[i][0], 'cpos':tile_pos[i][1]})
                     found_flag=True
                     rack_copy.pop(j)
                     break
