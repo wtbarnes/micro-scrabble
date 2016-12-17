@@ -1,6 +1,5 @@
 import os,sys
 import logging
-sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
@@ -19,4 +18,4 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 #app.config.from_object('flask_config')
 
-from micro_scrabble import views
+from . import views
