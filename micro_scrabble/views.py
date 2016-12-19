@@ -3,7 +3,7 @@ from flask import Flask,render_template
 from forms import NewGameForm,PlayerForm,SwapLettersForm
 from models import GameArchive
 from micro_scrabble import app,db
-import game as scrabble
+from micro_scrabble.game import Game
 
 #board config
 s = 50
@@ -23,7 +23,7 @@ def new_game():
         #TODO: error handling if this is not formatted correctly
         players = create_game_form.players.data.split(',')
         #Instantiate class
-        game  = scrabble.Game(name=create_game_form.name.data)
+        game  = Game(name=create_game_form.name.data)
         #add players
         game.add_players(player_names=players,num_players=len(players))
         #add to database
@@ -50,7 +50,7 @@ def delete_game(game_name):
 def cur_game(game_name):
     """Current game page"""
     #rebuild class instance from query
-    game  = scrabble.Game.unarchive(GameArchive.query.filter_by(game_name=game_name))
+    game  = Game.unarchive(GameArchive.query.filter_by(game_name=game_name))
     #first render the JS
     d3_board = render_template('js/board.js',height=game.board.dims[0]*s,
                                 width=game.board.dims[1]*s, square=s,
@@ -61,13 +61,12 @@ def cur_game(game_name):
                     'your_turn':game.players[key].name==game.player_order[0]} \
                                             for key in game.players])
 
-
 @app.route('/game-<game_name>/players/<player_name>',methods=['GET','POST'])
 def player_view(game_name,player_name):
     """Player Page"""
     #rebuild class instance from SQL request
     game_archive = GameArchive.query.filter_by(game_name=game_name)
-    game = scrabble.Game.unarchive(game_archive)
+    game = Game.unarchive(game_archive)
     #make forms
     player_form = PlayerForm()
     swap_form = SwapLettersForm()
